@@ -1,0 +1,64 @@
+
+////////// User authentication/////////////
+-- SQL query to create the medisync_patient_users table
+CREATE TABLE medisync_patient_users (
+    id SERIAL PRIMARY KEY,
+    fullName VARCHAR(100) NOT NULL,
+    contactNumber VARCHAR(20) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    age INT NOT NULL,
+    locationAddress VARCHAR(255) NOT NULL,
+    allowExtraEmails BOOLEAN NOT NULL,
+    role VARCHAR(20) DEFAULT 'patient'
+);
+
+
+-- SQL query to create the medisync_doctor_users table
+CREATE TABLE medisync_doctor_users (
+    id SERIAL PRIMARY KEY,
+    fullName VARCHAR(100) NOT NULL,
+    contactNumber VARCHAR(20) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    age INT NOT NULL,
+    nic VARCHAR(20) NOT NULL,
+    role VARCHAR(20) DEFAULT 'doctor'
+);
+
+
+-- SQL query to create the medisync_admin_users table
+CREATE TABLE medisync_admin_users (
+    id SERIAL PRIMARY KEY,
+    fullName VARCHAR(100) NOT NULL,
+    contactNumber VARCHAR(20) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    age INT NOT NULL,
+    requestId VARCHAR(20) NOT NULL,
+    role VARCHAR(20) DEFAULT 'admin'
+);
+
+
+
+
+
+
+
+////////// otp Queue storage //////////////
+CREATE TABLE medisync_otpdata (
+    id SERIAL PRIMARY KEY,
+    method VARCHAR(20) NOT NULL,
+    contact VARCHAR(100) NOT NULL,
+    OTP VARCHAR(20) NOT NULL
+);
+
+
+////////// Unique Id storage //////////////
+CREATE TABLE medisync_users_ids (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255),
+    password VARCHAR(255),
+    uuid text
+);
+

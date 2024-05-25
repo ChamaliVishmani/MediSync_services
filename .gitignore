@@ -153,4 +153,4 @@ cython_debug/
 
 
 node_auth_service\config.json
-educational-content-service/node_modules
+# educational-content-service/node_modules

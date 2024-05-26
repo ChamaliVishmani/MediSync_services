@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+require("dotenv").config();
 
 const articleRoutes = require("./routes/articleRoutes");
 const videoRoutes = require("./routes/videoRoutes");
@@ -16,13 +17,10 @@ app.use(cors()); // Add this line to enable CORS
 
 // Database connection
 mongoose
-  .connect(
-    "mongodb+srv://abeysinghechanuka:Kdv350WWo5KPJG3m@cluster0.3nhzevx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 

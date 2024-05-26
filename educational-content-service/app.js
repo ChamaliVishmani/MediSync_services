@@ -6,6 +6,7 @@ const cors = require("cors");
 const articleRoutes = require("./routes/articleRoutes");
 const videoRoutes = require("./routes/videoRoutes");
 const healthGuideRoutes = require("./routes/healthGuideRoutes");
+const drugRoutes = require("./routes/drugRoutes");
 
 const app = express();
 
@@ -29,6 +30,7 @@ mongoose
 app.use("/api/articles", articleRoutes);
 app.use("/api/videos", videoRoutes);
 app.use("/api/healthguides", healthGuideRoutes);
+app.use("/api/drugs", drugRoutes);
 
 // Start server
 const PORT = process.env.PORT || 3000;

@@ -1,44 +1,74 @@
 
 ////////// User authentication/////////////
--- SQL query to create the medisync_patient_users table
-CREATE TABLE medisync_patient_users (
+CREATE TABLE medisync_patient (
     id SERIAL PRIMARY KEY,
-    fullName VARCHAR(100) NOT NULL,
-    contactNumber VARCHAR(20) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
-    age INT NOT NULL,
-    locationAddress VARCHAR(255) NOT NULL,
-    allowExtraEmails BOOLEAN NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    medical_history TEXT,
+    current_medications TEXT,
+    emergency_contact VARCHAR(100),
+    insurance_information VARCHAR(100),
+    location_address VARCHAR(200) NOT NULL,
+    allow_extra_emails BOOLEAN DEFAULT FALSE,
     role VARCHAR(20) DEFAULT 'patient'
 );
 
 
--- SQL query to create the medisync_doctor_users table
-CREATE TABLE medisync_doctor_users (
+CREATE TABLE medisync_doctors (
     id SERIAL PRIMARY KEY,
-    fullName VARCHAR(100) NOT NULL,
-    contactNumber VARCHAR(20) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
-    age INT NOT NULL,
-    nic VARCHAR(20) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    specialization VARCHAR(100) NOT NULL,
+    medical_license_number VARCHAR(50) NOT NULL,
+    years_of_experience INT NOT NULL,
+    clinic_affiliation VARCHAR(200) NOT NULL,
+    allow_extra_emails BOOLEAN DEFAULT FALSE,
     role VARCHAR(20) DEFAULT 'doctor'
 );
 
 
--- SQL query to create the medisync_admin_users table
-CREATE TABLE medisync_admin_users (
+CREATE TABLE medisync_admin (
     id SERIAL PRIMARY KEY,
-    fullName VARCHAR(100) NOT NULL,
-    contactNumber VARCHAR(20) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
-    age INT NOT NULL,
-    requestId VARCHAR(20) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    employee_id VARCHAR(50) NOT NULL,
+    office_location VARCHAR(200) NOT NULL,
+    allow_extra_emails BOOLEAN DEFAULT FALSE,
     role VARCHAR(20) DEFAULT 'admin'
 );
 
+
+CREATE TABLE medisync_superadmin (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    access_level VARCHAR(100) NOT NULL,
+    security_clearance VARCHAR(50) NOT NULL,
+    employee_id VARCHAR(50) NOT NULL,
+    allow_extra_emails BOOLEAN DEFAULT FALSE,
+    role VARCHAR(20) DEFAULT 'superadmin'
+);
 
 
 
@@ -46,7 +76,7 @@ CREATE TABLE medisync_admin_users (
 
 
 ////////// otp Queue storage //////////////
-CREATE TABLE medisync_otpdata (
+CREATE TABLE madisync_otpdata (
     id SERIAL PRIMARY KEY,
     method VARCHAR(20) NOT NULL,
     contact VARCHAR(100) NOT NULL,
@@ -55,7 +85,7 @@ CREATE TABLE medisync_otpdata (
 
 
 ////////// Unique Id storage //////////////
-CREATE TABLE medisync_users_ids (
+CREATE TABLE madisync_users_ids (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255),
     password VARCHAR(255),

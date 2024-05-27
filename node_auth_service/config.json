@@ -1,0 +1,19 @@
+{
+    "mongodb": {
+      "uri": "",
+      "dbName": ""
+    },
+    "supabase": {
+      "supabaseUrl": "https://ovfsgdwhyiojhmfayaio.supabase.co",
+      "supabaseKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92ZnNnZHdoeWlvamhtZmF5YWlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1MTc4NDEsImV4cCI6MjAzMTA5Mzg0MX0.y_npzg3H7gASrCn_-2SNfPZoWLZmc72CGbUMhJaRO04",
+      "supabasetables": {
+        "id": "medisync_users_ids",
+        "patient_users": "medisync_patient",
+        "doctor_users": "medisync_doctor",
+        "admin_users": "medisync_admin",
+        "superadmin_users": "medisync_superadmin",
+        "otp": "medisync_otpdata"
+      }
+    }
+  }
+  

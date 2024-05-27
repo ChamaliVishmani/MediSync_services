@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const UserData = require('./data_classes/user_data');
 const { MongoClient, ObjectId } = require('mongodb');
 const { createClient } = require('@supabase/supabase-js');
 const cron = require('node-cron');
+const fs = require('fs');  // Import the fs module here
 
 const configFile = fs.readFileSync('config.json');
 const config = JSON.parse(configFile);
@@ -14,7 +16,7 @@ const mongoDBName = config.mongodb.dbName;
 // Access Supabase URL, API key, and table names
 const supabaseUrl = config.supabase.supabaseUrl;
 const supabaseKey = config.supabase.supabaseKey;
-const idTableName = config.supabase.tables.id;
+const idTableName = config.supabase.supabasetables.id;
 
 const {
     createRecord,
@@ -28,139 +30,44 @@ const {
     verifyOTP,
     reset_pass_function
 } = require('./auth_operations');
-// // index.js
+
+
+// index.js
 const { create, read, update, del, executeQuery } = require('./db_operations');
 const app = express();
+app.use(cors());
 const port = 3500;
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const ID_table = idTableName
-////////////////
-
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// // TODO: Firebase Push Notifications
-// const admin = require('firebase-admin');
-// const serviceAccount = require('./firebase_service.json');
-
-// admin.initializeApp({
-//     credential: admin.credential.cert(serviceAccount)
-// });
-
-// // Store scheduled notifications and their timers
-// const scheduledNotifications = {};
-
-// // Custom method for scheduling notifications
-// function scheduleNotification(time, notificationData, deviceToken) {
-//   // Get the current time
-//   const currentTime = new Date();
-//   const currentHours = currentTime.getHours();// 
-//   const currentMinutes = currentTime.getMinutes();
-
-//   // Parse the provided time string (e.g., "14:30")
-//   const [targetHour, targetMinute] = time.split(':').map(Number);
-
-//   // Calculate the time difference until the target time
-//   let timeDifference = (targetHour - currentHours) * 60 + (targetMinute - currentMinutes);
-
-//   // If the target time has already passed for today, add 24 hours to the time difference
-//   if (timeDifference < 0) {
-//     timeDifference += 24 * 60;
-//   }
-
-//   // Convert the time difference to milliseconds
-//   const delayMilliseconds = timeDifference * 60 * 1000;
-
-//   // Set a timer to execute the function after the delay
-//   const timer = setTimeout(() => {
-//     // Construct the message with notification data
-//     const message = {
-//       notification: {
-//         title: notificationData.title,
-//         body: notificationData.body,
-//         imageUrl: notificationData.imageUrl,
-//       },
-//       token: deviceToken,
-//     };
-
-//     // Send the notification
-//     admin.messaging().send(message)
-//       .then((response) => {
-//         console.log('Successfully sent message:', response);
-//       })
-//       .catch((error) => {
-//         console.log('Error sending message:', error);
-//       });
-
-//     // Remove the timer from the scheduled notifications
-//     delete scheduledNotifications[deviceToken];
-//   }, delayMilliseconds);
-
-//   // Store the timer for cancellation later
-//   scheduledNotifications[deviceToken] = timer;
-// }
 
 
-// // Example usage:
-// const notificationTime1 = '16:18'; // Time in HH:mm format
-// const notificationData1 = {
-//   title: 'Notification Title',
-//   body: 'Notification Body',
-//   icon: 'notification_icon',
-//   imageUrl: 'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg',
-// };
-
-
-// // Schedule a notification
-// scheduleNotification(notificationTime1, notificationData1, registrationToken);
-
-
-
-
-// TODO: Auth Start - Implementations on the auth_operations.js file
-// Login route
 app.post('/login', async (req, res) => {
-    let { username, password } = req.body;
-
+    const { email, password } = req.body;
     try {
-        const result = await login_post_method(username, password);
+        const result = await login_post_method(email, password);
         res.json(result);
     } catch (error) {
-        console.error('Error occurred during login:', error);
         res.status(500).json({ success: false, message: 'An error occurred. Please try again later.' });
     }
 });
-
-// // Signup route
-// app.post('/signup', async (req, res) => {
-//     const { name, age, username, email, mobile, password } = req.body;
-
-//     try {
-//         const result = await signup_post_method(name, age, username, email, mobile, password);
-//         res.json(result);
-//     } catch (error) {
-//         console.error('Error occurred during signup:', error);
-//         res.status(500).json({ success: false, message: 'An error occurred. Please try again later.' });
-//     }
-// });
 
 // Signup route
 app.post('/signup', async (req, res) => {
-    const { role, formData } = req.body;
-    console.log(formData, role);
     try {
-        // Call the function to handle signup based on role
-        // await signupByRole(role, formData);
+        await signupByRole(req.body);
         res.status(200).json({ success: true, message: 'Signup successful' });
     } catch (error) {
-        console.error('Error occurred during signup:', error);
         res.status(500).json({ success: false, message: 'An error occurred. Please try again later.' });
     }
 });
+
+
 
 
 
@@ -168,7 +75,6 @@ app.post('/signup', async (req, res) => {
 // Send OTP route
 app.post('/send_otp', async (req, res) => {
     const { method, contact, isNumericOTP, otpDigitCount, otpCountdownTime } = req.body;
-
     try {
         const result = await sendOTP(contact, method, isNumericOTP, otpDigitCount);
         res.json(result);
@@ -205,11 +111,8 @@ app.post('/reset_password', async (req, res) => {
 // TODO: Auth End
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // Function to create or retrieve user UUID based on username and password
-
-
-
 
 // TODO: MongoDB Atles cluster
 async function connect() {
@@ -226,10 +129,6 @@ async function connect() {
     }
 }
 
-
-
-
-
 function generateUniqueID() {
     // Generate a random number and convert it to base 36
     const randomNumber = Math.random().toString(36).substring(2);
@@ -239,7 +138,6 @@ function generateUniqueID() {
     const uniqueID = randomNumber + timestamp;
     return uniqueID;
 }
-
 
 async function getUserUUID(username, password, FirebaseServiceToken) {
     try {
@@ -281,7 +179,6 @@ async function getUserUUID(username, password, FirebaseServiceToken) {
     }
 }
 
-
 async function saveGlobalData(globalData, uniqueId) {
     try {
         // Check if the document with the unique ID exists in MongoDB
@@ -317,7 +214,7 @@ async function getGlobalData(uniqueId) {
     }
 }
 
-// TODO: You can save data on MongoDB Atles cluster with this post method. 
+// TODO: You can save data on MongoDB Atles cluster with this post method.
 app.post('/update_global_data', async (req, res) => {
     try {
         // Extract username and password from userData
@@ -341,7 +238,7 @@ app.post('/update_global_data', async (req, res) => {
     }
 });
 
-// TODO: You can get data on MongoDB Atles cluster with this post method. 
+// TODO: You can get data on MongoDB Atles cluster with this post method.
 // Endpoint to send global data to frontend based on username and password
 app.post('/get_global_data', async (req, res) => {
     try {
@@ -354,7 +251,6 @@ app.post('/get_global_data', async (req, res) => {
 
         const globalDataFromDatabase = await getGlobalData(uniqueId);
 
-
         if (globalDataFromDatabase) {
             // Send global data as JSON response
             res.json({ globalDataFromDatabase });
@@ -365,7 +261,6 @@ app.post('/get_global_data', async (req, res) => {
         res.status(500).json({ success: false, message: 'An error occurred while fetching global data.' });
     }
 });
-
 
 // Start the server
 app.listen(port, () => {

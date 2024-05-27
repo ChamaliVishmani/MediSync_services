@@ -1,5 +1,7 @@
 // dbFunctions.js
 const { MongoClient, ObjectId } = require('mongodb');
+const fs = require('fs'); 
+
 
 const configFile = fs.readFileSync('config.json');
 const config = JSON.parse(configFile);

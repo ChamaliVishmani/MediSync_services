@@ -1,7 +1,7 @@
 {
     "mongodb": {
-      "uri": "mongodb+srv://clothcraftar:clothcraftar123@cluster0.wxus2z3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-      "dbName": "clothcraftar"
+      "uri": "",
+      "dbName": ""
     },
     "supabase": {
       "supabaseUrl": "https://ovfsgdwhyiojhmfayaio.supabase.co",

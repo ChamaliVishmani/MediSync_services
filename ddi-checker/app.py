@@ -49,12 +49,13 @@ def drugs_list():
 # Eureka client configuration
 app_name = "drug-interaction-checker"
 eureka_server_url = "http://localhost:8761/"
+instance_port = 8084
 
 # Initialize Eureka client
 eureka_client = EurekaClient(app_name=app_name, eureka_server=eureka_server_url,
                              # Health check endpoint
-                             instance_port=8084, instance_ip="127.0.0.1", health_check_url="http://127.0.0.1:8084/health",
-                             status_page_url="http://127.0.0.1:8084/status",)
+                             instance_port=instance_port, instance_ip="127.0.0.1", health_check_url="http://127.0.0.1:{instance_port}/health",
+                             status_page_url="http://127.0.0.1:{instance_port}/status",)
 
 
 @app.on_event("startup")
@@ -69,12 +70,12 @@ async def shutdown_event():
 
 @app.get("/health")
 async def health_check():
-    return {"status": "UP"}
+    return {"status": "ddi-checker service UP"}
 
 
 @app.get("/status")
 async def status():
-    return {"status": "Service is running"}
+    return {"status": "ddi-checker service is running"}
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8084, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=instance_port, reload=True)

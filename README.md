@@ -141,3 +141,76 @@
     "status": "disease prediction service is running"
   }
   ```
+
+# Appointment scheduling service
+
+## API Endpoints
+
+### 1. `/add-patient` (POST)
+
+- **Description:** Adds a new patient to the database.
+- **Request Body:**
+  ```json
+  {
+    "name": "John Doe",
+    "age": 30,
+    "email": "johndoe@example.com"
+  }
+  ```
+  
+#### 2. `/add-doctor` (POST)
+
+- **Description:** Adds a new doctor to the database.
+- **Request Body:**
+  ```json
+  {
+    "name": "Dr. Smith",
+    "email": "drsmith@example.com",
+    "specialty": "Cardiology",
+    "hospital_id": 1
+  }
+  ```
+
+### 3. `/add-hospital` (POST)
+
+- **Description:** Adds a new hospital to the database.
+- **Request Body:**
+  ```json
+  {
+    "name": "City Hospital",
+    "location": "123 Main St, Cityville"
+  }
+  ```
+  
+### 4.`/add-available-appointment` (POST)
+
+- **Description:** Adds a new available appointment for a doctor.
+- **Request Body:**
+  ```json
+  {
+    "doctor_id": 1,
+    "hospital_id": 1,
+    "appointment_date": "2024-08-01T10:00:00.000Z"
+  }
+  ```
+
+### 5. `/get-available-appointments` (POST)
+
+- **Description:** Retrieves available appointments based on specialty.
+- **Request Body:**
+  ```json
+  {
+    "specialty": "Cardiology"
+  }
+  ```
+
+### 6. /book-appointment` (POST)
+- **Description:** Books an appointment for a patient.
+- **Request Body:**
+  ```json
+  {
+    "patientId": 1,
+    "patientEmail": "johndoe@example.com",
+    "appointmentId": 1
+  }
+  ```
